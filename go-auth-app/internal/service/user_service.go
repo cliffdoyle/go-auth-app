@@ -2,6 +2,8 @@ package service
 
 import (
 	"errors"
+	"fmt"
+
 	"github.com/cliffdoyle/go-auth-app/internal/auth"
 	"github.com/cliffdoyle/go-auth-app/internal/model"
 	"github.com/cliffdoyle/go-auth-app/internal/repository"
@@ -21,6 +23,7 @@ type LoginPayload struct {
 
 type UserService interface {
 	RegisterUser(payload SignupPayload) (*model.User, error)
+	CreateAdmin(payload SignupPayload) (*model.User, error)
 	LoginUser(payload LoginPayload, jwtSecret string, jwtExpiry int) (string, error)
 }
 
@@ -45,31 +48,63 @@ func (s *userService) RegisterUser(payload SignupPayload) (*model.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	
-	var userCount int64
-	// Simple check: if the first user (ID=1) doesn't exist, this is the first registration.
-	_, err = s.repo.FindUserByID(1)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		userCount = 0
-	} else {
-		userCount = 1
-	}
-	
-	role := model.UserRole
-	if userCount == 0 {
-		role = model.AdminRole
-	}
+
+	// var userCount int64
+	// // Simple check: if the first user (ID=1) doesn't exist, this is the first registration.
+	// _, err = s.repo.FindUserByID(1)
+	// if errors.Is(err, gorm.ErrRecordNotFound) {
+	// 	userCount = 0
+	// } else {
+	// 	userCount = 1
+	// }
+
+	// role := model.UserRole
+	// if userCount == 0 {
+	// 	role = model.AdminRole
+	// }
 
 	user := &model.User{
 		Name:     payload.Name,
 		Email:    payload.Email,
 		Password: hashedPassword,
-		Role:     role,
+		Role:     model.UserRole,
 	}
 
 	if err := s.repo.CreateUser(user); err != nil {
 		return nil, err
 	}
+	user.Password = ""
+	return user, nil
+}
+
+// NEW CreateAdmin function
+func (s *userService) CreateAdmin(payload SignupPayload) (*model.User, error) {
+	// Check if user already exists
+	_, err := s.repo.FindUserByEmail(payload.Email)
+	if err == nil {
+		return nil, fmt.Errorf("user with email %s already exists", payload.Email)
+	}
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+
+	hashedPassword, err := auth.HashPassword(payload.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	// Explicitly create a user with the AdminRole
+	user := &model.User{
+		Name:     payload.Name,
+		Email:    payload.Email,
+		Password: hashedPassword,
+		Role:     model.AdminRole,
+	}
+
+	if err := s.repo.CreateUser(user); err != nil {
+		return nil, err
+	}
+
 	user.Password = ""
 	return user, nil
 }
