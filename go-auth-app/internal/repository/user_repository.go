@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"go-auth-app/internal/model"
+	"github.com/cliffdoyle/go-auth-app/internal/model"
 	"gorm.io/gorm"
 )
 

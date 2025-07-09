@@ -2,9 +2,9 @@ package service
 
 import (
 	"errors"
-	"go-auth-app/internal/auth"
-	"go-auth-app/internal/model"
-	"go-auth-app/internal/repository"
+	"github.com/cliffdoyle/go-auth-app/internal/auth"
+	"github.com/cliffdoyle/go-auth-app/internal/model"
+	"github.com/cliffdoyle/go-auth-app/internal/repository"
 	"gorm.io/gorm"
 )
 

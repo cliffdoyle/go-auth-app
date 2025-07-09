@@ -3,8 +3,8 @@ package api
 import (
 	"context"
 	"github.com/golang-jwt/jwt/v5"
-	"go-auth-app/internal/auth"
-	"go-auth-app/internal/model"
+	"github.com/cliffdoyle/go-auth-app/internal/auth"
+	"github.com/cliffdoyle/go-auth-app/internal/model"
 	"net/http"
 	"strings"
 )

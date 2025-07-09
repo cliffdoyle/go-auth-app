@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
-	"go-auth-app/internal/service"
+	"github.com/cliffdoyle/go-auth-app/internal/service"
 	"net/http"
 )
 

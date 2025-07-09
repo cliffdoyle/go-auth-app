@@ -7,10 +7,10 @@ import (
 	"os"
 	"strconv"
 	"github.com/joho/godotenv"
-	"go-auth-app/internal/api"
-	"go-auth-app/internal/database"
-	"go-auth-app/internal/repository"
-	"go-auth-app/internal/service"
+	"github.com/cliffdoyle/go-auth-app/internal/api"
+	"github.com/cliffdoyle/go-auth-app/internal/database"
+	"github.com/cliffdoyle/go-auth-app/internal/repository"
+	"github.com/cliffdoyle/go-auth-app/internal/service"
 )
 
 func main() {

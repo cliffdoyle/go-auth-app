@@ -1,7 +1,7 @@
 package database
 
 import (
-	"go-auth-app/internal/model"
+	"github.com/cliffdoyle/go-auth-app/internal/model"
 	"log/slog"
 
 	"gorm.io/driver/sqlite"
